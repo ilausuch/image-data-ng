@@ -13,6 +13,7 @@ const middleware = require('./middleware')
 const services = require('./services')
 const appHooks = require('./app.hooks')
 const channels = require('./channels')
+const Connection = require('./connection')
 
 const app = express(feathers())
 
@@ -45,5 +46,7 @@ app.use(express.notFound())
 app.use(express.errorHandler({ logger }))
 
 app.hooks(appHooks)
+
+app.db = new Connection()
 
 module.exports = app

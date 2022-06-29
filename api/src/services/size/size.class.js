@@ -1,20 +1,12 @@
 /* eslint-disable no-unused-vars */
-const pg = require("pg");
-
 exports.Size = class Size {
-  constructor (options) {
+  constructor (options, app) {
     this.options = options || {};
+    this.app = app
   }
 
   async find (params) {
-    const client = new pg.Client(process.env.DB_CONNECTION);
-
-    await client.connect()
-
-    const res = await client.query('SELECT * from size')
-
-    client.end()
-
+    const res = await this.app.db.query('SELECT * from size')
     return res.rows;
   }
 
