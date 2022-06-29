@@ -2,11 +2,41 @@
 exports.Size = class Size {
   constructor (options, app) {
     this.options = options || {};
-    this.app = app
+    this.app = app;
   }
 
+/* return a list of rows
+ * * filtered by columns with given values
+ * optionally limit the number of fetch records
+*/
   async find (params) {
-    const res = await this.app.db.query('SELECT * from size')
+	let cmd = ["SELECT", "*", "from", "size"];
+
+	if (Object.getOwnPropertyNames(params.query).length > 0) {
+		cmd.push('WHERE');
+		for (let [k, v] of Object.entries(params.query)) {
+			if (!params.query.hasOwnProperty(k)) {
+				continue;
+			}
+
+			if (k === 'last' ) {
+				cmd.pop();
+				cmd.push('LIMIT');
+				cmd.push(v);
+				cmd.push('AND');
+			} else {
+				cmd.push(k);
+				cmd.push("=");
+				cmd.push(`'${v}'`);
+				cmd.push('AND');
+			}
+
+		}
+		// always remove last AND
+		cmd.pop();
+	}
+
+    const res = await this.app.db.query(cmd.join(" "));
     return res.rows;
   }
 
@@ -22,17 +52,5 @@ exports.Size = class Size {
     }
 
     return data;
-  }
-
-  async update (id, data, params) {
-    return data;
-  }
-
-  async patch (id, data, params) {
-    return data;
-  }
-
-  async remove (id, params) {
-    return { id };
   }
 };
