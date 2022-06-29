@@ -3,17 +3,19 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -22,6 +24,21 @@ ChartJS.register(
 export default function BarChart(props) {
   let options = {
     responsive: true,
+    scales: {
+      y : {
+        ticks: {
+          callback: function(value, index, ticks) {
+              return value + " Mb";
+          }
+        }
+      },
+      x : {
+        title: {
+          display: true,
+          text: "Build"
+        }
+      }
+    },
     plugins: {
       legend: {
         position: 'top',
@@ -38,7 +55,11 @@ export default function BarChart(props) {
     },
   }
 
-  console.log(options)
+  if (props.yaxisMax)
+    options.scales.y.max = props.yaxisMax
+
+  if (props.yaxisMin)
+    options.scales.y.min = props.yaxisMin
 
   let data = {
     labels: props.xaxis?.labels,
@@ -49,8 +70,11 @@ export default function BarChart(props) {
     if (element.backgroundColor === undefined)
       element.backgroundColor = ["blue"]
 
+    if (element.borderColor === undefined)
+      element.borderColor = 'rgb(53, 162, 235)'
+
     data.datasets.push(element)
   })
 
-  return <Bar options={options} data={data} />
+  return <Line options={options} data={data} />
 }
