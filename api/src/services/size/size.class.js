@@ -5,36 +5,36 @@ exports.Size = class Size {
     this.app = app;
   }
 
-/* return a list of rows
+  /* return a list of rows
  * * filtered by columns with given values
  * optionally limit the number of fetch records
 */
   async find (params) {
-	let cmd = ["SELECT", "*", "from", "size"];
+    let cmd = ["SELECT", "*", "from", "size"];
 
-	if (Object.getOwnPropertyNames(params.query).length > 0) {
-		cmd.push('WHERE');
-		for (let [k, v] of Object.entries(params.query)) {
-			if (!params.query.hasOwnProperty(k)) {
-				continue;
-			}
+    if (Object.getOwnPropertyNames(params.query).length > 0) {
+      cmd.push('WHERE');
+      for (let [k, v] of Object.entries(params.query)) {
+        if (!Object.hasOwn(params.query, k)) {
+          continue;
+        }
 
-			if (k === 'last' ) {
-				cmd.pop();
-				cmd.push('LIMIT');
-				cmd.push(v);
-				cmd.push('AND');
-			} else {
-				cmd.push(k);
-				cmd.push("=");
-				cmd.push(`'${v}'`);
-				cmd.push('AND');
-			}
+        if (k === 'last' ) {
+          cmd.pop();
+          cmd.push('LIMIT');
+          cmd.push(v);
+          cmd.push('AND');
+        } else {
+          cmd.push(k);
+          cmd.push("=");
+          cmd.push(`'${v}'`);
+          cmd.push('AND');
+        }
 
-		}
-		// always remove last AND
-		cmd.pop();
-	}
+      }
+      // always remove last AND
+      cmd.pop();
+    }
 
     const res = await this.app.db.query(cmd.join(" "));
     return res.rows;

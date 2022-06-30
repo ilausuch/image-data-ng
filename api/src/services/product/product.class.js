@@ -2,12 +2,12 @@
 exports.Product = class Product {
   constructor (options, app) {
     this.options = options || {};
-	this.app = app;
+    this.app = app;
   }
 
   async find () {
-	let cmd = `SELECT DISTINCT product from size`;
-	const res = await this.app.db.query(cmd);
+    let cmd = `SELECT DISTINCT product from size`;
+    const res = await this.app.db.query(cmd);
     return res.rows;
   }
 
