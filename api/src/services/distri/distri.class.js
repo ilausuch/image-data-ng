@@ -1,14 +1,23 @@
 /* eslint-disable no-unused-vars */
-exports.Flavor = class Flavor {
+exports.Distri = class Distri {
   constructor (options, app) {
     this.options = options || {};
     this.app = app;
   }
 
   async find (params) {
-    let cmd = "SELECT DISTINCT flavor from size";
-    if (params?.query?.product) {
-      cmd += ` WHERE product = '${params.query.product}'`;
+    let cmd = "SELECT DISTINCT distri FROM size";
+    let is_where = 0;
+	
+    for (const [k, v] of Object.entries(params.query)) {
+      if (!is_where) {
+        cmd += ' WHERE';
+        is_where = 1;
+      } else {
+        cmd += ' AND';
+      }
+
+      cmd += ` ${k} = '${v}'`;
     }
 
     const res = await this.app.db.query(cmd);
