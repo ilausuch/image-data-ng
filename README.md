@@ -15,3 +15,8 @@ $ yarn
 To run (dev mode), use the DB_CONNECTION environment variable to provide the connection string
 $ DB_CONNECTION="postgres://..." yarn dev
 ```
+
+## Dashboard
+
+### Libraries
+- https://blueprintjs.com/
