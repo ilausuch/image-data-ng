@@ -24,20 +24,21 @@ class Connection {
       .then(console.log("Connection with DB OK"));
   }
 
-  query(query) {
+  async query(query) {
     let res;
 
     console.log(query);
 
     try {
-      res = this.client.query(query);
+      res = await this.client.query(query);
     } catch (err) {
       if (err instanceof Error) {
         console.log(err);
-        this.client.connect().then(console.log("Reconnected to DB"));
+        await this.client.connect();
+        console.log("Reconnected to DB");
       }
-
-      res = this.client.query(query);
+      console.log("error", err)
+      res = await this.client.query(query);
     }
 
     return res;

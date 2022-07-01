@@ -38,8 +38,6 @@ export default function BarChart(props) {
     },
   }
 
-  console.log(options)
-
   let data = {
     labels: props.xaxis?.labels,
     datasets: [],
